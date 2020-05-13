@@ -48,4 +48,4 @@ def test_get_api_countries_stats(client):
 
         assert 'stats' in response
         assert 'Poland' in response['stats']
-        assert 'Cameroon' in response['countries']
+        assert 'Cameroon' in response['stats']
