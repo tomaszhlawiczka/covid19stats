@@ -9,7 +9,7 @@
 
 ## Installation
 
-```
+```bash
 git clone https://github.com/tomaszhlawiczka/covid19stats
 cd covid19stats
 
@@ -25,26 +25,26 @@ See: `backend/settings.py` to setup connection to `Redis` database.
 
 
 ## Tests - backend
-```
+```bash
 ./backend/venv/bin/pytest backend/tests
 ```
 ![](images/Screenshot_20200513_145930.jpeg)
 
 ## Update stats
-```
+```bash
 ./backend/venv/bin/python -m backend.collector
 ```
 ![](images/Screenshot_20200513_150156.jpeg)
 
 ## Running dev backend server
-```
+```bash
 FLASK_ENV=development FLASK_APP=backend/server.py ./backend/venv/bin/flask run
 ```
 ![](images/Screenshot_20200513_150241.jpeg)
 
 
 ## Running dev frontend server
-```
+```bash
 (cd frontend; yarn install; yarn start)
 ```
 See: http://localhost:3000/
@@ -52,7 +52,7 @@ See: http://localhost:3000/
 
 
 ## Tests - frontend
-```
+```bash
 (cd frontend; yarn install; yarn test)
 ```
 ![](images/Screenshot_20200513_150655.jpeg)
@@ -65,7 +65,7 @@ See: http://localhost:3000/
 ### Step 2 - loading countries stats with batches
 ![](images/Screenshot_20200513_152143.jpeg)
 
-### Step 3 - data loaded, upading periodicly
+### Step 3 - data loaded, updating periodically
 ![](images/Screenshot_20200513_152202.jpeg)
 
 ### Error case - no connection to server
