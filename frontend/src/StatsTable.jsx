@@ -160,7 +160,7 @@ StatsTable.propTypes = {
 };
 
 
-function Country({name, stats, onRefresh}) {
+export function Country({name, stats, onRefresh}) {
 
     if (!stats)
         return <ListGroupItem>
