@@ -2,6 +2,7 @@
 import logging
 import logging.config
 
+
 SRC_URL = 'https://www.worldometers.info/coronavirus/'
 
 REDIS_DB = {

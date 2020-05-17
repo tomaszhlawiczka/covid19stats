@@ -7,7 +7,13 @@ from . import models, settings
 
 
 log = logging.getLogger(__name__)
-fields_list = "total_cases,new_cases,total_deaths,new_deaths,total_recovered,active_cases,serious,critical,total_cases_1m_pop,deaths_1m_pop,total_tests".split(",")
+
+fields_list = "total_cases,new_cases,total_deaths,new_deaths,total_recovered,active_cases,serious,total_cases_1m_pop,deaths_1m_pop,total_tests,total_tests_1m_pop,population".split(",")
+fields_list_len = len(fields_list)
+
+
+class ParsingError(ValueError):
+    pass
 
 
 def download(url):
@@ -44,10 +50,10 @@ def parse(content):
 
     tables = html.select("table#main_table_countries_today")
     if not tables:
-        raise ValueError("Missing table tag")
+        raise ParsingError("Missing table tag")
 
     if len(tables) > 1:
-        raise ValueError("Too many tables")
+        raise ParsingError("Too many tables")
 
     found = 0
 
@@ -57,13 +63,17 @@ def parse(content):
             continue
 
         tds = tr.find_all("td")
-        if not tds or len(tds) != 13:
+        if not tds:
             continue
 
-        country, *numbers, continent = [i.string for i in tds]
+        index, country, *numbers, continent = [i.string for i in tds]
 
         if country is None or country == "World":
             continue
+
+        if len(numbers) != fields_list_len:
+            log.error(f"Invalid row for the country {country}: {tds}")
+            raise ParsingError("Invalid row")
 
         try:
             yield country, dict(zip(fields_list, map(parse_number, numbers)))

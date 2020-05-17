@@ -9,7 +9,7 @@ from .. import collector
 def test_parser():
 
     with open(Path(__file__).parent / "COVID-19_Worldometer.html", "r") as input_data:
-        assert len(list(collector.parse(input_data.read()))) == 214
+        assert len(list(collector.parse(input_data.read()))) == 215
 
 
 def test_parser_no_table():
@@ -22,6 +22,49 @@ def test_parser_too_many_tables():
 
     with pytest.raises(ValueError):
         list(collector.parse('<html><body><table id="table#main_table_countries_today"></table><table id="table#main_table_countries_today"></table></body></html>'))
+
+
+def test_parser_invalid_row_not_enough_cols():
+
+    code = '''<html><body>
+    <table id="table#main_table_countries_today">
+    <tr>
+        <td>Poland</td>
+    </tr>
+    </table>
+    </body></html>'''
+
+    with pytest.raises(collector.ParsingError):
+        list(collector.parse(code))
+
+
+def test_parser_invalid_row_too_many_cols():
+
+    code = '''<html><body>
+    <table id="table#main_table_countries_today">
+        <tr>
+            <td>75</td>
+            <td><a class="mt_a" href="country/senegal/">Senegal</a></td>
+            <td>2,429</td>
+            <td>+119</td>
+            <td>25 </td>
+            <td></td>
+            <td>949</td>
+            <td>1,455</td>
+            <td>6</td>
+            <td>146</td>
+            <td>1</td>
+            <td>24,599</td>
+            <td>1,474</td>
+            <td><a href="/world-population/senegal-population/">16,684,681</a> </td>
+            <td style="display:none" data-continent="Africa">Africa</td>
+            <td>extra column</td>
+        </tr>
+    </table>
+    </body></html>'''
+
+    with pytest.raises(collector.ParsingError):
+        list(collector.parse(code))
 
 
 def test_parse_number():
