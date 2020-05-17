@@ -26,6 +26,9 @@ def test_get_api(client):
         mock_redis_hkeys.side_effect = hkeys
 
         rv = client.get('/api')
+
+        assert rv.status_code == 200
+
         response = json.loads(rv.data)
 
         assert 'countries' in response
@@ -44,8 +47,23 @@ def test_get_api_countries_stats(client):
         mock_redis_hmget.side_effect = hmget
 
         rv = client.get('/api/countries?names=Poland,Cameroon')
+
+        assert rv.status_code == 200
+
         response = json.loads(rv.data)
 
         assert 'stats' in response
         assert 'Poland' in response['stats']
         assert 'Cameroon' in response['stats']
+
+
+def test_get_api_countries_missing_params(client):
+
+    rv = client.get('/api/countries')
+    assert rv.status_code == 400
+
+
+def test_get_api_countries_invalid_method(client):
+
+    rv = client.post('/api/countries')
+    assert rv.status_code == 405

@@ -1,5 +1,5 @@
 import datetime
-from flask import Flask, request
+from flask import Flask, request, abort
 
 from . import models, settings
 
@@ -20,6 +20,9 @@ def index():
 
 @app.route('/api/countries', methods=['GET'])
 def countries():
+
+    if "names" not in request.args:
+        abort(400, 'Missing GET param names')
 
     names = request.args["names"].split(",")
     data = models.get_countries_data(names)
