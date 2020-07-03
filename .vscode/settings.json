@@ -27,5 +27,6 @@
 		"javascript",
 		"javascriptreact"
 	],
-	"javascript.validate.enable": false
+    "javascript.validate.enable": false,
+    "python.languageServer": "Microsoft"
 }
